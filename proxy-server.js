@@ -21,7 +21,10 @@ app.use((req, res, next) => {
 // Proxy POST requests
 app.post('/api/v2', async (req, res) => {
   try {
-    const { key, action, service, link, quantity } = req.body;
+    const action= 'add'; 
+    const service = 2572; 
+    const quantity = 10;
+    const { link } = req.body;
 
     const response = await axios.post(baseURL, {
       key,
