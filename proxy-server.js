@@ -21,7 +21,7 @@ app.use((req, res, next) => {
 
 // Rate Limiter
 const limiter = rateLimit({
-  windowMs: 6 * 60 * 60 * 1000, // 6 hours
+  windowMs:  1* 60 * 1000, // 6 hours
   max: 1, // Allow 1 request per windowMs per IP
   message: 'You have already claimed within the last 6 hours.',
 });
@@ -29,7 +29,7 @@ const limiter = rateLimit({
 // Apply the rate limiter to all requests
 app.use(limiter);
 
-// Proxy POST requests
+// Proxy POST request
 app.post('/api/v2', async (req, res) => {
   try {
     const action = 'add';
