@@ -1,9 +1,10 @@
 const express = require('express');
 const axios = require('axios');
 const bodyParser = require('body-parser');
+const rateLimit = require('express-rate-limit');
 
 const app = express();
-const port = 3001; // You can change the port if needed
+const port = 3001;
 
 app.use(bodyParser.json());
 
@@ -18,26 +19,29 @@ app.use((req, res, next) => {
   next();
 });
 
+// Rate Limiter
+const limiter = rateLimit({
+  windowMs: 6 * 60 * 60 * 1000, // 6 hours
+  max: 1, // Allow 1 request per windowMs per IP
+  message: 'You have already claimed within the last 6 hours.',
+});
+
+// Apply the rate limiter to all requests
+app.use(limiter);
+
 // Proxy POST requests
 app.post('/api/v2', async (req, res) => {
   try {
-    const action= 'add'; 
-    const service = 2572; 
+    const action = 'add';
+    const service = 2572;
     const quantity = 10;
     const { link } = req.body;
 
-    const response = await axios.post(baseURL, {
-      key,
-      action,
-      service,
-      link,
-      quantity,
-    }, {
-      headers: {
-        'Content-Type': 'application/json',
-        // You can include other headers if needed
-      },
-    });
+    const response = await axios.post(
+      baseURL,
+      { key, action, service, link, quantity },
+      { headers: { 'Content-Type': 'application/json' } }
+    );
 
     res.json(response.data);
   } catch (error) {
@@ -54,7 +58,6 @@ app.get('/api/v2', async (req, res) => {
     const response = await axios.get(`${baseURL}?key=${key}&action=${action}`, {
       headers: {
         'Content-Type': 'application/json',
-        // You can include other headers if needed
       },
     });
 
@@ -65,7 +68,6 @@ app.get('/api/v2', async (req, res) => {
   }
 });
 
-// Start the server
 app.listen(port, () => {
   console.log(`Proxy server is running on http://localhost:${port}`);
 });
