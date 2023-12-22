@@ -21,16 +21,13 @@ app.use((req, res, next) => {
 
 // Rate Limiter
 const limiter = rateLimit({
-  windowMs:  2*60 * 1000, // 6 hours
-  max: 3, // Allow 1 request per windowMs per IP
+  windowMs: 6 * 60 * 60 * 1000, // 6 hours
+  max: 3, // Allow 3 requests per 6-hour window per IP
   message: 'You have already claimed within the last 6 hours.',
 });
 
-// Apply the rate limiter to all requests
-app.use(limiter);
-
-// Proxy POST request
-app.post('/api/v2', async (req, res) => {
+// Apply the rate limiter only to the specific route(s) you want
+app.post('/api/v2', limiter, async (req, res) => {
   try {
     const action = 'add';
     const service = 2572;
@@ -51,7 +48,7 @@ app.post('/api/v2', async (req, res) => {
 });
 
 // Proxy GET requests
-app.get('/api/v2', async (req, res) => {
+app.get('/api/v2', limiter, async (req, res) => {
   try {
     const { key, action } = req.query;
 
