@@ -21,8 +21,8 @@ app.use((req, res, next) => {
 
 // Rate Limiter
 const limiter = rateLimit({
-  windowMs: 6 *60* 60 * 1000, // 6 hours
-  max: 1, // Allow 1 request per windowMs per IP
+  windowMs:  60 * 1000, // 6 hours
+  max: 3, // Allow 1 request per windowMs per IP
   message: 'You have already claimed within the last 6 hours.',
 });
 
