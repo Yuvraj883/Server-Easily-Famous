@@ -8,7 +8,7 @@ const port = 3001;
 
 app.use(bodyParser.json());
 
-const key = 'e4c8c15861780f3a9ad8288cd3e8f0a7';
+const key = '8ec7fffe5c6d104a15a0232b765a56f6';
 const baseURL = 'https://indianprovider.com/api/v2';
 
 // Middleware to handle CORS
@@ -22,7 +22,7 @@ app.use((req, res, next) => {
 // Rate Limiter
 const limiter = rateLimit({
   windowMs: 6 * 60 * 60 * 1000, // 6 hours
-  max: 1, // Allow 3 requests per 6-hour window per IP
+  max: 1, // Allow only 1 request per 6-hour window per IP
   message: 'You have already claimed within the last 6 hours.',
 });
 
