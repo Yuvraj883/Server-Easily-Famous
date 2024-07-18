@@ -19,6 +19,9 @@ app.use((req, res, next) => {
   next();
 });
 
+// Trust proxy
+app.set('trust proxy', 1); // trust first proxy
+
 // Rate Limiter
 const limiter = rateLimit({
   windowMs: 6 * 60 * 60 * 1000, // 6 hours
